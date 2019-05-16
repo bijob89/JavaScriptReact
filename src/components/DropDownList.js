@@ -3,15 +3,15 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import { arrayOf } from "prop-types";
-// import { async } from "q";
+import  MenuBar from './MenuBar'
 
 
 
 class DropDownList extends Component {
     state = {
-        age: '',
+        value: '',
         open: false,
+        setstate:{}
     };
 
     handleChange = event => {
@@ -27,26 +27,17 @@ class DropDownList extends Component {
     }
 
     getMenuItems(value) {
-        //  console.log( (Array.of(value))[0]);
-        //  console.log(Object.values(value) )
-        //  console.log(Object.keys(value) )
-
-        // console.log(Array.of( this.props.data)) 
-        // console.log(Array.of( this.props.data).length)
-
-           console.log(this.props.data) 
-           console.log(this.props.data.length)
-
-
-        //   Array.of( this.props.data)["0"].forEach((item,index) =>{
-              
-        //     console.log(item)
-        //     console.log(index)
-        //   } 
-        // );
-        return value.map(item => {
+        var dataValue;
+        if(value.language === ''){
+            dataValue = value.languageArray
+        }else if(value.version === ''){
+            dataValue = []
+            // var language = value.language
+            value.languageVersionData.this.state.value.map(item => dataValue.push(item.version))
+        }
+        return dataValue.map(item => {
             return (
-                <option>{item.lang}</option>
+                <MenuItem key={item} value={item}>{item}</MenuItem>
             )
         })
     }
@@ -54,27 +45,23 @@ class DropDownList extends Component {
     render() {
         return (
             <FormControl>
-                <InputLabel htmlFor="demo-controlled-open-select">Age</InputLabel>
+                <InputLabel id={this.props.data.classes.inputLabel} htmlFor="formatted-text-mask-input">{this.props.data.label}</InputLabel>
 
-                {/* <Select
+                <Select
+                    id="formatted-text-mask-input"
                     open={this.state.open}
                     onClose={this.handleClose}
                     onOpen={this.handleOpen}
-                    value={this.state.age}
-                    onChange={this.handleChange}
+                    value={this.state.value}
+                    onChange={(e) => this.setState({value:e.target.value})}
                 >
                     <MenuItem value="">
                         <em>None</em>
                     </MenuItem>
-                    <MenuItem value={1}>
-                        <em>One</em>
-                    </MenuItem>
                     {this.getMenuItems(this.props.data)}
-                </Select> */}
-                <select>
-                    <option>Any</option>
-                    {this.getMenuItems(this.props.data)}
-                </select>
+                    {/* {MenuBar.setMenuState(this.state.value)} */}
+                </Select>
+                {console.log(this.state.value)}
             </FormControl>
         )
     }

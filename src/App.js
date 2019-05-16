@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import './components/css/style.css';
 import Header from './components/Header';
-import Transaltions from './components/Translations';
+import MenuBar from './components/MenuBar';
 
 const styles = theme => ({
   root: {
@@ -15,31 +15,42 @@ const styles = theme => ({
     padding: theme.spacing.unit * 2,
     textAlign: 'center',
     color: theme.palette.text.secondary,
-    backgroundColor: 'lightgreen',
   },
   textDisplay:{
     padding: theme.spacing.unit * 2,
     textAlign: 'center',
     color: theme.palette.text.secondary,
-    backgroundColor: 'lightgreen',
     marginBottom:'20px',
-    height: 100
+    height: 100,
   },
   tokenList:{
-    padding: theme.spacing.unit * 2,
+    // padding: theme.spacing.unit * 2,
     textAlign: 'center',
     color: theme.palette.text.secondary,
-    backgroundColor: 'lightgreen',
     marginBottom:'20px',
-    height: 252
+    height: 252,
+    overflow:'auto'
   },
   selectButton:{
     // padding: theme.spacing.unit,
-    padding: '2px',
+    // padding: '2px',
     textAlign: 'center',
     color: theme.palette.text.secondary,
-    backgroundColor: 'lightgreen',
-    marginLeft: '10px',
+    marginLeft: '0px',
+  },
+  inputLabel:{
+    padding:'2px',
+    width:'20px',
+    marginBottom:'10px'
+  },
+  ul:{
+    marginRight:'-10%',
+  },
+  li:{
+    width:'100%',
+    float:'left',
+    listStyle:'none',
+    border:'1px solid grey'
   }
 });
 
@@ -53,7 +64,7 @@ function App(props) {
         <Grid item xs={12}>
           <Header />
         </Grid>
-        <Transaltions classes={classes} />
+        <MenuBar classes={classes} />
       </Grid>
     </div>
   );
