@@ -1,8 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { Select, MenuItem } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
+import ConcordanceBooks from './ConcordanceBooks';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import Divider from '@material-ui/core/Divider';
+// var grammar = require('usfm-grammar')
 
 
 class Translations extends Component {
@@ -10,92 +15,85 @@ class Translations extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            book: '',
-            tokenList: []
-        }
-        // this.getBooks()
-    }
-
-    getBookItems() {
-        // this.getBooks()
-        if (this.props.data.books) {
-            return this.props.data.bookList.map(item => {
-                return (
-                    <MenuItem key={item} value={item}>{item}</MenuItem>
-                )
-            })
-        } else {
-            return (
-                <MenuItem key="" value="">Select Book</MenuItem>
-            )
+            selectedToken: '',
+            usfmTextList: [],
+            token:''
         }
     }
 
-    async getTokenList(){
-        var book = await fetch('http://127.0.0.1:8000/v1/tokenlist/' + this.props.data.language + '/' + this.props.data.version + '/' + this.state.book, {
-            method:'GET'
-        })
-        const mJson = await book.json();
-        this.setState({
-            tokenList:mJson,
-            books:true
-        })
+    async getVerseText(token) {
+        // const data = fetch('', {
+        //     method:'GET'
+        // })
+        // const myJson = data.json()
+        const verse = [
+        "\v 1 దేవుడు ఎన్నుకున్న వారి విశ్వాసాన్ని స్థిరపరచడం కోసం, వారు దైవ భక్తికి అనుగుణమైన సత్యం గురించిన ఎరుకలో నిలకడగా ఉండేలా, మన ",
+        "\v 2 అబద్ధమాడలేని దేవుడు కాలానికి ముందే వాగ్దానం చేసిన శాశ్వత జీవం గురించిన నిశ్చయతలో పౌలు అనే నేను దేవుని సేవకుణ్ణి, యేసు క్రీస్తు అపొస్తలుణ్ణి. మన",
+        "\v 3 సరైన సమయంలో అయన ఇప్పుడు మన రక్షకుడైన దేవుని ఆజ్ఞ ప్రకారం నాకు అప్పగించిన సందేశం వలన తన వాక్కును వెల్లడి చేశాడు. \p ",
+        "\v 4 మన అందరి ఉమ్మడి విశ్వాసం విషయంలో నా సొంత కుమారుడు తీతుకు రాస్తున్న లేఖ. తండ్రియైన దేవుని నుండీ, మన రక్షకుడైన క్రీస్తు యేసు నుండీ కృప, కరుణ, శాంతి సమాధానాలు నీకు కలుగు గాక. \p \v "
+        ]
+        this.setState({usfmTextList:verse})
     }
 
-    getTokens(){
-        return this.state.tokenList.map(item => {
+    handleClick = e => {
+        // console.log(e.target.getAttribute('value'))
+        var word = e.target.getAttribute('value')
+        this.setState({selectedToken: word}, () => this.getVerseText(word))
+    }
+
+    getTokens() {
+        return this.props.data.tokenList.map(item => {
             return (
-            <li className={this.props.data.classes.li} key={item} value={item}>{item}</li>
+                // <ListItem key={item} name={item} value={item} onClick={(e) => this.setState({token:e.target.value})}>{item}</ListItem>
+                <div>
+                <ListItem button
+                key={item} 
+                name={item} 
+                value={item} 
+                onClick={this.handleClick}>{item}</ListItem><Divider /></div>
             )
         })
     }
+
+    // getVerse(){
+    //     const verse = `
+    //     \v 1 దేవుడు ఎన్నుకున్న వారి విశ్వాసాన్ని స్థిరపరచడం కోసం, వారు దైవ భక్తికి అనుగుణమైన సత్యం గురించిన ఎరుకలో నిలకడగా ఉండేలా, మన 
+    //     \v 2 అబద్ధమాడలేని దేవుడు కాలానికి ముందే వాగ్దానం చేసిన శాశ్వత జీవం గురించిన నిశ్చయతలో పౌలు అనే నేను దేవుని సేవకుణ్ణి, యేసు క్రీస్తు అపొస్తలుణ్ణి. మన
+    //     \v 3 సరైన సమయంలో అయన ఇప్పుడు మన రక్షకుడైన దేవుని ఆజ్ఞ ప్రకారం నాకు అప్పగించిన సందేశం వలన తన వాక్కును వెల్లడి చేశాడు. \p 
+    //     \v 4 మన అందరి ఉమ్మడి విశ్వాసం విషయంలో నా సొంత కుమారుడు తీతుకు రాస్తున్న లేఖ. తండ్రియైన దేవుని నుండీ, మన రక్షకుడైన క్రీస్తు యేసు నుండీ కృప, కరుణ, శాంతి సమాధానాలు నీకు కలుగు గాక. \p \v 
+    //     `
+    // }
 
     render() {
-        console.log(this.props)
-        console.log(this.state)
-        // this.getBooks()
+        console.log("token",this.state)
         return (
-            <Grid container spacing={24}>
-                <Grid item xs={4}>
+            // <Grid container spacing={24}>
+            <Fragment>
+
+                {/* </div> */}
+                <Grid container spacing={24}>
+                    <Grid  item xs={4}>
                     <Paper className={this.props.data.classes.tokenList}>
-                        <Grid>
-                            <Paper className={this.props.data.classes.selectbutton}>
-                                <InputLabel htmlFor="formatted-text-mask-input">Choose Book</InputLabel>
-                                <Select
-                                    value={this.state.book}
-                                    onChange={(e) => this.setState({ book: e.target.value }, () => {this.getTokenList()})}
-                                >
-                                    {this.getBookItems()}
-                                </Select>
-                            </Paper>
-                        </Grid>
-                        <ul className={this.props.data.classes.selectbutton}>
+                        <List >
+                        {/* <ul> */}
                             {/* <li className={this.props.data.classes.li}>one</li> */}
                             {this.getTokens()}
-                        </ul>
-                    </Paper>
-                </Grid>
-                <Grid item xs={8}>
-                    <Grid item xs={12}>
-                        <Paper className={this.props.data.classes.textDisplay}>xs=6</Paper>
+                        </List>
+                        {/* </ul> */}
+                        </Paper>
                     </Grid>
-                    <Grid item xs={12}>
-                        <Paper className={this.props.data.classes.textDisplay}>xs=6</Paper>
-                    </Grid>
+                    {/* </Paper> */}
+                    {/* </Grid> */}
+                    <ConcordanceBooks data={{
+                        classes: this.props.data.classes,
+                        language: this.props.data.language,
+                        version: this.props.data.version,
+                        usfmTextList: this.state.usfmTextList,
+                        selectedToken: this.state.selectedToken
+                    }} />
+                    {/* </Grid> */}
                 </Grid>
-                <Grid item xs={3}>
-                    <Paper className={this.props.data.classes.paper}>xs=3</Paper>
-                </Grid>
-                <Grid item xs={3}>
-                    <Paper className={this.props.data.classes.paper}>xs=3</Paper>
-                </Grid>
-                <Grid item xs={3}>
-                    <Paper className={this.props.data.classes.paper}>xs=3</Paper>
-                </Grid>
-                <Grid item xs={3}>
-                    <Paper className={this.props.data.classes.paper}>xs=3</Paper>
-                </Grid>
-            </Grid>
+            </Fragment>
         )
     }
 }
