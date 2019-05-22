@@ -1,11 +1,5 @@
 import React, { Component, Fragment } from "react";
-// import { Grid } from "@material-ui/core";
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import { TextField } from "@material-ui/core";
-
-
-
+import { TextField, Paper, Grid } from "@material-ui/core";
 
 
 class ConcordanceBooks extends Component {
@@ -16,45 +10,61 @@ class ConcordanceBooks extends Component {
         }
     }
 
-
-    // componentWillMount(){
-    //     console.log("componentWill", this.props.data.book)
-    //     if(this.props.data.book){
-    //         fetch('http://127.0.0.1:8000/v1/tokenlist/' + this.props.data.language + '/' + this.props.data.version + '/' + this.props.data.book, {
-    //             method:'GET'
-    //         })
-    //         .then(result => result.json())
-    //         .then(res => this.setState({usfmText:res}))
-    //     }
-    // }
-
-    displayUsfmText() {
-        if (this.props.data.usfmTextList === []) {
-            return <p>Loading data</p>
-        } else {
-            return this.props.data.usfmTextList.map(item => {
+    displayBookConcordance() {
+        // console.log("error area", this.props)
+        // if(!this.props.data.book){
+        //     return <p>Select Token to Load Data</p>
+        // }else if (!this.props.data.usfmTextList) {
+        //     return <p>Select Token to Load Data</p>
+        if(!this.props.data.book){
+            return <p>Select Token to Load Data</p>
+        // }else if (!this.props.data.usfmTextList) {
+        //     return <p>Select Token to Load Data</p>
+        }else if(this.props.data.usfmTextFlag) {
+            const { book, usfmTextList } = this.props.data
+            return usfmTextList[book.toLowerCase()].map(item => {
                 return (
-                    <p>{item}</p>
+                    <p key={item.book}><span>{item.book.toUpperCase()} {item.chapterNumber}:{item.verseNumber} </span>{item.verse}</p>
                 )
             })
-            // <p>{this.props.data.usfmText}</p>
+        }else{
+            return <p>Select Token to Load Dat</p>
         }
     }
 
+    displayAllBooksConcordance() {
+        // console.log("book", this.props.data.book)
+        if(!this.props.data.book){
+            return <p>Select Token to Load Data</p>
+        // }else if (!this.props.data.usfmTextList) {
+        //     return <p>Select Token to Load Data</p>
+        }else if(this.props.data.usfmTextFlag) {
+            const { usfmTextList } = this.props.data
+            return usfmTextList.all.map(item => {
+                return (
+                    <p key={item.book}><span>{item.book.toUpperCase()} {item.chapterNumber}:{item.verseNumber} </span>{item.verse}</p>
+                )
+            })
+        }else{
+            return <p>Select Token to Load Dat</p>
+        }
+    }    
+
     render() {
-        console.log("conc", this.props)
+        // console.log("conc", this.props)
+        console.log("props",this.props)
         return (
             <Fragment>
                 <Grid item xs={8}>
                     <Grid item xs={12}>
                         <Paper className={this.props.data.classes.textDisplay}>
-                            {this.displayUsfmText()}
+                            {this.displayBookConcordance()}
 
                         </Paper>
                     </Grid>
                     <Grid item xs={12}>
-                        <Paper className={this.props.data.classes.textDisplay}>xs=6
-
+                        <Paper className={this.props.data.classes.textDisplay}>
+                            {this.displayAllBooksConcordance()}
 
                         </Paper>
                     </Grid>

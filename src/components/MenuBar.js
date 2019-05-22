@@ -1,29 +1,19 @@
 import React, { Component } from 'react';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
+import { FormControl, Grid, Paper, MenuItem, Select, InputLabel } from '@material-ui/core';
 import Translations from './Translations';
 import './css/style.css'
-// import DropDownList from './DropDownList';
-
-
 
 class MenuBar extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            // languageArray: [],
             languageVersionData: {},
             language: '',
             version: '',
             bookList: '',
             book: '',
             tokenList: [],
-            selectedToken: '',
-            usfmText: ''
+            usfmTextFlag: false
         }
     }
 
@@ -47,9 +37,7 @@ class MenuBar extends Component {
         })
 
     }
-    // componentWillUnmount(){
 
-    // }
     getLanguages(value) {
         var languages = Object.keys(value);
         return languages.map(item => {
@@ -63,7 +51,6 @@ class MenuBar extends Component {
         if (!language) {
             return <MenuItem key="" value="">Loading Versions</MenuItem>
         }
-        // this.getBooks()
         return this.state.languageVersionData[language].map(item => {
             return (
                 <MenuItem key={item.id} value={item.version}>{item.version}</MenuItem>
@@ -81,16 +68,14 @@ class MenuBar extends Component {
         })
         const tokenList = await book.json();
 
-        var getUsfm = await fetch('http://127.0.0.1:8000/v1/usfmtexts/' + this.state.language + '/' + this.state.version + '/' + this.state.book, {
-            method: 'GET'
-        })
-        const usfmJson = await getUsfm.json();
-        const usfmText = usfmJson[this.state.book]
-
-        // var jsonOutput = grammar.parse(usfmText)
+        // var getUsfm = await fetch('http://127.0.0.1:8000/v1/usfmtexts/' + this.state.language + '/' + this.state.version + '/' + this.state.book, {
+        //     method: 'GET'
+        // })
+        // const usfmJson = await getUsfm.json();
+        // const usfmText = usfmJson[this.state.book]
         this.setState({
             tokenList,
-            usfmText
+            // usfmText
         })
     }
     getBookItems() {
@@ -108,9 +93,6 @@ class MenuBar extends Component {
         }
     }
 
-
-
-
     render() {
         return (
             <Grid className={this.props.classes.mainGrid} container spacing={24}>
@@ -123,7 +105,12 @@ class MenuBar extends Component {
                             className={this.props.classes.selectMenu}
                             // id="formatted-text-mask-input"
                             value={this.state.language}
-                            onChange={(e) => this.setState({ language: e.target.value })}
+                            onChange={(e) => this.setState({ 
+                                language: e.target.value, 
+                                version: '', 
+                                book:'',
+                                usfmTextFlag: false
+                            })}
                             inputProps={{
                                 id: 'select-language',
                             }}
@@ -140,7 +127,11 @@ class MenuBar extends Component {
                         <Select
                             className={this.props.classes.selectMenu}
                             value={this.state.version}
-                            onChange={(e) => this.setState({ version: e.target.value }, () => { this.getBooks() })}
+                            onChange={(e) => this.setState({ 
+                                version: e.target.value, 
+                                book:'',
+                                usfmTextFlag: false
+                             }, () => { this.getBooks() })}
                             inputProps={{
                                 id: 'select-version',
                             }}
@@ -157,7 +148,10 @@ class MenuBar extends Component {
                         <Select
                             className={this.props.classes.selectMenu}
                             value={this.state.book}
-                            onChange={(e) => this.setState({ book: e.target.value }, () => { this.getTokenList() })}
+                            onChange={(e) => this.setState({ 
+                                book: e.target.value, 
+                                usfmTextFlag: false 
+                            }, () => { this.getTokenList() })}
                             inputProps={{
                                 id: 'select-book',
                             }}
@@ -167,16 +161,14 @@ class MenuBar extends Component {
                         </Select>
                         </FormControl>
                     </Paper>
-                </Grid>
-                
-                   
+                </Grid>   
                 <Translations data={{
                     classes: this.props.classes,
-                    books: this.state.books,
+                    book: this.state.book,
                     language: this.state.language,
                     version: this.state.version,
                     tokenList: this.state.tokenList,
-                    usfmText:this.state.usfmText
+                    usfmTextFlag: this.state.usfmTextFlag
                 }} />
             </Grid>
         )
