@@ -21,14 +21,28 @@ class ConcordanceBooks extends Component {
         // }else if (!this.props.data.usfmTextList) {
         //     return <p>Select Token to Load Data</p>
         }else if(this.props.data.usfmTextFlag) {
-            const { book, usfmTextList } = this.props.data
+            const { book, usfmTextList, selectedToken, classes } = this.props.data
             return usfmTextList[book.toLowerCase()].map(item => {
                 return (
-                    <p key={item.book}><span>{item.book.toUpperCase()} {item.chapterNumber}:{item.verseNumber} </span>{item.verse}</p>
+                    <p key={item.book}>
+                        <span>{item.book.toUpperCase()} {item.chapterNumber}:{item.verseNumber} </span>
+                        {item.verse.split(" ").map(span => {
+                            if(span.includes(selectedToken)){
+                                return(
+                                    <span className={classes.highlightToken}> {span} </span>
+                                )
+                            }else {
+                                return (
+                                    <span> {span} </span>
+                                )
+                            }
+                            }
+                        )}
+                    </p>
                 )
             })
         }else{
-            return <p>Select Token to Load Dat</p>
+            return <p>Select Token to Load Data</p>
         }
     }
 
@@ -39,20 +53,36 @@ class ConcordanceBooks extends Component {
         // }else if (!this.props.data.usfmTextList) {
         //     return <p>Select Token to Load Data</p>
         }else if(this.props.data.usfmTextFlag) {
-            const { usfmTextList } = this.props.data
+            const { book, usfmTextList, selectedToken, classes } = this.props.data
             return usfmTextList.all.map(item => {
                 return (
-                    <p key={item.book}><span>{item.book.toUpperCase()} {item.chapterNumber}:{item.verseNumber} </span>{item.verse}</p>
+                    <p key={item.book}>
+                        <span>{item.book.toUpperCase()} {item.chapterNumber}:{item.verseNumber} </span>
+                        {item.verse.split(" ").map(span => {
+                            if(span.includes(selectedToken)){
+                                return(
+                                    <span className={classes.highlightToken}> {span} </span>
+                                )
+                            }else {
+                                return (
+                                    <span> {span} </span>
+                                )
+                            }
+                            }
+                        )}
+                    </p>
                 )
             })
         }else{
-            return <p>Select Token to Load Dat</p>
+            return <p>Select Token to Load Data</p>
         }
-    }    
+    }
+
 
     render() {
         // console.log("conc", this.props)
         console.log("props",this.props)
+        
         return (
             <Fragment>
                 <Grid item xs={8}>
@@ -73,13 +103,15 @@ class ConcordanceBooks extends Component {
                     {/* <Paper> */}
                     <Grid item xs={3}>
                         {/* xs */}
-                        <Paper className={this.props.data.classes.paper}>xs=3
-                    <TextField type="file" name="file" />
+                        <Paper className={this.props.data.classes.paper}>
+                        Space For Translation Notes
                         </Paper>
                     </Grid>
                     <Grid item xs={3}>
                         {/* xs */}
-                        <Paper className={this.props.data.classes.paper}>xs=3</Paper>
+                        <Paper className={this.props.data.classes.paper}>
+                        Space For Translation Word
+                        </Paper>
                     </Grid>
                     <Grid item xs={3}>
                         {/* xs */}
