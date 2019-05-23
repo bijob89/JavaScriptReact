@@ -115,11 +115,11 @@ class ConcordanceBooks extends Component {
                     </Grid>
                     <Grid item xs={3}>
                         {/* xs */}
-                        <Paper className={this.props.data.classes.paper}>xs=3</Paper>
+                        <Paper className={this.props.data.classes.paper}>Space for Translating Token</Paper>
                     </Grid>
                     <Grid item xs={3}>
                         {/* xs */}
-                        <Paper className={this.props.data.classes.paper}>xs=3</Paper>
+                        <Paper className={this.props.data.classes.paper}>Summary</Paper>
                     </Grid>
                     {/* </Paper> */}
                 </Grid>
