@@ -3,17 +3,12 @@ import { FormControl, Grid, Paper, MenuItem, Select, InputLabel } from '@materia
 import './css/style.css'
 
 class MenuBar extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
+    state = {
             languageVersionData: {},
             language: '',
             version: '',
             bookList: '',
             book: '',
-            tokenList: [],
-            usfmTextFlag: false
-        }
     }
 
     getLanguageData = async () => {
@@ -97,8 +92,8 @@ class MenuBar extends Component {
     render() {
         const { classes, updateState, language, version, book } = this.props.data
         return (
-            <Grid container xs={12}>
-                <Grid item xs={4} md={2}>
+            <Grid container item xs={12}>
+                <Grid item xs={3} md={2}>
                     <Paper className={classes.selectButtonPaper}>
                         <FormControl className={classes.formControl}>
                             <InputLabel htmlFor="select-language">Language</InputLabel>
@@ -118,7 +113,7 @@ class MenuBar extends Component {
                         </FormControl>
                     </Paper>
                 </Grid>
-                <Grid item xs={4} md={2}>
+                <Grid item xs={3} md={2}>
                     <Paper className={classes.selectButtonPaper}>
                         <FormControl className={classes.formControl}>
                             <InputLabel htmlFor="select-version">Version</InputLabel>
@@ -138,7 +133,7 @@ class MenuBar extends Component {
                         </FormControl>
                     </Paper>
                 </Grid>
-                <Grid item xs={4} md={2}>
+                <Grid item xs={3} md={2}>
                     <Paper className={classes.selectButtonPaper}>
                         <FormControl className={classes.formControl}>
                             <InputLabel htmlFor="select-book">Books</InputLabel>

@@ -15,7 +15,6 @@ const styles = theme => ({
   },
   h1: {
     padding: '10px 0px 20px 0px',
-    // width:'100%',
     margin: '0px',
     textAlign: 'center',
     color: '#fff',
@@ -29,7 +28,6 @@ const styles = theme => ({
   },
   textDisplay: {
     padding: theme.spacing.unit,
-    textAlign: 'center',
     color: theme.palette.text.secondary,
     marginBottom: '10px',
     height: 140,
@@ -40,12 +38,10 @@ const styles = theme => ({
     marginLeft:'20px'
   },
   tokenList: {
-    // padding: theme.spacing.unit * 2,
     textAlign: 'center',
     color: theme.palette.text.secondary,
     marginTop:'20px',
     marginLeft:'20px',
-    // marginBottom:'20px',
     height: 343,
     overflowX: 'hidden',
     overflowY: 'auto',
@@ -53,7 +49,6 @@ const styles = theme => ({
   },
   selectButtonPaper: {
     padding: theme.spacing.unit,
-    // padding: '2px',
     textAlign: 'center',
     color: theme.palette.text.secondary,
     marginLeft: '20px',
@@ -65,29 +60,17 @@ const styles = theme => ({
     color: 'blue'
   },
   mainGrid: {
-    // backgroundColor:"blue",
     width: '100%',
-    // marginLeft:'auto',
-    // marginRight:'auto',
-    // backgroundColor:'blue',
-    // paddingLeft:'20px',
-    // paddingRight:'20px',
     paddingTop: '0',
     marginTop: '0',
     height: 'auto',
-    // backgroundImage: `url(${Image})`,
-    // backgroundSize: 'cover',
-    // backgroundRepeat: 'no-repeat'
   },
   selectTwo: {
     padding: theme.spacing.unit,
-    // padding: '2px',
     textAlign: 'center',
     color: theme.palette.text.secondary,
     marginLeft: '0px',
     position: 'fixed',
-    // top:'20%',
-    // marginBottom:'10%',
     width: '29%',
 
   },
@@ -116,7 +99,6 @@ const styles = theme => ({
   },
   selectMenu: {
     width: '120px',
-    // backgroundColor:'blue'
   },
   highlightToken: {
     color: 'blue',
@@ -128,10 +110,10 @@ function App(props) {
   const { classes } = props;
   return (
     <Grid container className={classes.root}>
-      <Grid  xs={12}>
+      <Grid  item xs={12}>
         <Header classes={classes} />
       </Grid>
-      <Grid xs={12}>
+      <Grid item xs={12}>
         <HomePage classes={classes} />
       </Grid>
     </Grid>

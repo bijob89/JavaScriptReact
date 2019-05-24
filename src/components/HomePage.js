@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Paper } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import MenuBar from './MenuBar';
 import TokenList from './TokenList';
 import Concordance from './Concordance';
@@ -15,15 +15,13 @@ export default class HomePage extends Component {
     }
 
     updateState = (value) => {
-        // console.log(value)
         this.setState(value)
     }
 
     render() {
         const { classes } = this.props
-        console.log(this.state)
         return (
-            <Grid xs={12}>
+            <Grid item xs={12}>
                 <MenuBar data={{
                     updateState: this.updateState,
                     classes: classes,
@@ -31,8 +29,8 @@ export default class HomePage extends Component {
                     version: this.state.version,
                     book: this.state.book
                 }} />
-                <Grid container xs={11}>
-                    <Grid xs={4}>
+                <Grid container item xs={11}>
+                    <Grid item xs={4}>
                         <TokenList data={{
                             updateState: this.updateState,
                             tokenList: this.state.tokenList,
@@ -42,7 +40,7 @@ export default class HomePage extends Component {
                             version: this.state.version
                         }} />
                     </Grid>
-                    <Grid xs={8}>
+                    <Grid item xs={8}>
                         <Concordance data={{
                             classes:classes,
                             book: this.state.book,
