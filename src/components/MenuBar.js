@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { FormControl, Grid, Paper, MenuItem, Select, InputLabel } from '@material-ui/core';
-import Translations from './Translations';
 import './css/style.css'
 
 class MenuBar extends Component {
@@ -38,7 +37,7 @@ class MenuBar extends Component {
 
     }
 
-    getLanguages(value) {
+    displayLanguages(value) {
         var languages = Object.keys(value);
         return languages.map(item => {
             return (
@@ -47,7 +46,7 @@ class MenuBar extends Component {
         })
     }
 
-    getVersions(language) {
+    displayVersions(language) {
         if (!language) {
             return <MenuItem key="" value="">Loading Versions</MenuItem>
         }
@@ -67,19 +66,21 @@ class MenuBar extends Component {
             method: 'GET'
         })
         const tokenList = await book.json();
-
-        // var getUsfm = await fetch('http://127.0.0.1:8000/v1/usfmtexts/' + this.state.language + '/' + this.state.version + '/' + this.state.book, {
-        //     method: 'GET'
-        // })
-        // const usfmJson = await getUsfm.json();
-        // const usfmText = usfmJson[this.state.book]
-        this.setState({
-            tokenList,
-            // usfmText
-        })
+        this.props.data.updateState({tokenList: tokenList})
     }
+
+
+    onVersionSelection = (value) => {
+        this.getBooks()
+        this.props.data.updateState({version: value})
+    }
+
+    onBookSelection = (value) => {
+        this.getTokenList()
+        this.props.data.updateState({book: value})
+    }
+
     getBookItems() {
-        // this.getBooks()
         if (this.state.bookList) {
             return this.state.bookList.map(item => {
                 return (
@@ -94,82 +95,68 @@ class MenuBar extends Component {
     }
 
     render() {
+        const { classes, updateState, language, version, book } = this.props.data
         return (
-            <Grid className={this.props.classes.mainGrid} container spacing={24}>
+            <Grid container xs={12}>
                 <Grid item xs={4} md={2}>
-                
-                    <Paper className={this.props.classes.selectButtonPaper}>
-                    <FormControl className={this.props.classes.formControl}>
-                        <InputLabel htmlFor="select-language">Language</InputLabel><br/>
-                        <Select
-                            className={this.props.classes.selectMenu}
-                            // id="formatted-text-mask-input"
-                            value={this.state.language}
-                            onChange={(e) => this.setState({ 
-                                language: e.target.value, 
-                                version: '', 
-                                book:'',
-                                usfmTextFlag: false
-                            })}
-                            inputProps={{
-                                id: 'select-language',
-                            }}
-                        >
-                            {this.getLanguages(this.state.languageVersionData)}
-                        </Select>
+                    <Paper className={classes.selectButtonPaper}>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel htmlFor="select-language">Language</InputLabel>
+                            <Select className={classes.selectMenu}
+                                inputProps={{
+                                    id: 'select-language'
+                                }}
+                                value={language}
+                                onChange={(e) => this.setState({
+                                    language: e.target.value,
+                                    version: '',
+                                    book: ''
+                                }, () => updateState({language:e.target.value}))
+                                }>
+                                {this.displayLanguages(this.state.languageVersionData)}
+                            </Select>
                         </FormControl>
                     </Paper>
                 </Grid>
                 <Grid item xs={4} md={2}>
-                    <Paper className={this.props.classes.selectButtonPaper}>
-                    <FormControl className={this.props.classes.formControl}>
-                        <InputLabel htmlFor="select-version">Version</InputLabel><br/>
-                        <Select
-                            className={this.props.classes.selectMenu}
-                            value={this.state.version}
-                            onChange={(e) => this.setState({ 
-                                version: e.target.value, 
-                                book:'',
-                                usfmTextFlag: false
-                             }, () => { this.getBooks() })}
-                            inputProps={{
-                                id: 'select-version',
-                            }}
-                        >
-                            {this.getVersions(this.state.language)}
-                        </Select>
+                    <Paper className={classes.selectButtonPaper}>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel htmlFor="select-version">Version</InputLabel>
+                            <Select
+                                className={classes.selectMenu}
+                                value={version}
+                                onChange={(e) => this.setState({
+                                    version: e.target.value,
+                                    book: ''
+                                }, () => { this.onVersionSelection(e.target.value) })}
+                                inputProps={{
+                                    id: 'select-version',
+                                }}
+                            >
+                                {this.displayVersions(this.state.language)}
+                            </Select>
                         </FormControl>
                     </Paper>
                 </Grid>
                 <Grid item xs={4} md={2}>
-                    <Paper className={this.props.classes.selectButtonPaper}>
-                    <FormControl className={this.props.classes.formControl}>
-                        <InputLabel htmlFor="select-book">Book</InputLabel><br/>
-                        <Select
-                            className={this.props.classes.selectMenu}
-                            value={this.state.book}
-                            onChange={(e) => this.setState({ 
-                                book: e.target.value, 
-                                usfmTextFlag: false 
-                            }, () => { this.getTokenList() })}
-                            inputProps={{
-                                id: 'select-book',
-                            }}
-                        >
-                            {this.getBookItems()}
-
-                        </Select>
+                    <Paper className={classes.selectButtonPaper}>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel htmlFor="select-book">Books</InputLabel>
+                            <Select
+                                className={classes.selectMenu}
+                                value={book}
+                                onChange={(e) => this.setState({
+                                    book: e.target.value
+                                }, () => { this.onBookSelection(e.target.value) })}
+                                inputProps={{
+                                    id: 'select-book',
+                                }}
+                            >
+                                {this.getBookItems()}
+                            </Select>
                         </FormControl>
                     </Paper>
-                </Grid>   
-                <Translations data={{
-                    classes: this.props.classes,
-                    book: this.state.book,
-                    language: this.state.language,
-                    version: this.state.version,
-                    tokenList: this.state.tokenList,
-                    usfmTextFlag: this.state.usfmTextFlag
-                }} />
+                </Grid>
             </Grid>
         )
     }
