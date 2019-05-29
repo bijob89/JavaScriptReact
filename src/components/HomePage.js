@@ -3,6 +3,7 @@ import { Grid } from '@material-ui/core';
 import MenuBar from './MenuBar';
 import TokenList from './TokenList';
 import Concordance from './Concordance';
+import Translations from './Translations';
 
 export default class HomePage extends Component {
     state = {
@@ -42,13 +43,16 @@ export default class HomePage extends Component {
                     </Grid>
                     <Grid item xs={8}>
                         <Concordance data={{
-                            classes:classes,
+                            classes: classes,
                             book: this.state.book,
-                            concordance:this.state.concordance,
+                            concordance: this.state.concordance,
                             token: this.state.token
                         }} />
                     </Grid>
                 </Grid>
+                <Translations data={{
+                    classes: classes
+                }} />
             </Grid>
         )
     }

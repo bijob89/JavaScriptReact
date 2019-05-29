@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import './components/css/style.css';
 import Header from './components/Header';
 import HomePage from './components/HomePage';
+import { BrowserRouter, Route} from 'react-router-dom';
 
 const styles = theme => ({
   root: {
@@ -34,14 +35,14 @@ const styles = theme => ({
     overflow: 'auto',
     textAlign: 'justify',
     lineHeight: '25px',
-    marginTop:'20px',
-    marginLeft:'20px'
+    marginTop: '20px',
+    marginLeft: '20px'
   },
   tokenList: {
     textAlign: 'center',
     color: theme.palette.text.secondary,
-    marginTop:'20px',
-    marginLeft:'20px',
+    marginTop: '20px',
+    marginLeft: '20px',
     height: 343,
     overflowX: 'hidden',
     overflowY: 'auto',
@@ -109,14 +110,17 @@ const styles = theme => ({
 function App(props) {
   const { classes } = props;
   return (
-    <Grid container className={classes.root}>
-      <Grid  item xs={12}>
-        <Header classes={classes} />
+    <BrowserRouter>
+      <Grid container className={classes.root}>
+        <Grid item xs={12}>
+          <Header classes={classes} />
+        </Grid>
+        <Grid item xs={12}>
+          {/* <HomePage classes={classes} /> */}
+          <Route path="/homepage" component={() => <HomePage classes={classes} />} />
+        </Grid>
       </Grid>
-      <Grid item xs={12}>
-        <HomePage classes={classes} />
-      </Grid>
-    </Grid>
+    </BrowserRouter>
   );
 }
 
