@@ -33,6 +33,7 @@ export default class Concordance extends Component {
         const { classes, concordance, book, token } = this.props.data
         return (
             <Grid container item xs={12}>
+            {/* <Paper className={classes.tokenList}> */}
                 <Grid item xs={12}>
                     <Paper className={classes.textDisplay}>
                         {this.displayConcordance(concordance[book.toLowerCase()], token)}
@@ -43,6 +44,7 @@ export default class Concordance extends Component {
                         {this.displayConcordance(concordance.all, token)}
                     </Paper>
                 </Grid>
+                {/* </Paper> */}
             </Grid>
         )
     }

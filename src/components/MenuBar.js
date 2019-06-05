@@ -5,19 +5,26 @@ import './css/style.css'
 class MenuBar extends Component {
     state = {
             languageVersionData: {},
+            languagesList:[],
             language: '',
             version: '',
             bookList: '',
             book: '',
+            targetLanguage:''
     }
 
     getLanguageData = async () => {
-        const result = await fetch("http://127.0.0.1:8000/v1/getlanguages", {
+        const fetchLanguageVersionData = await fetch("http://127.0.0.1:8000/v1/getlanguages", {
             method: 'GET'
         });
-        const mJson = await result.json();
-        var languageVersionData = mJson.languages
-        this.setState({ languageVersionData })
+        const languageVersionJson = await fetchLanguageVersionData.json();
+        var languageVersionData = languageVersionJson.languages
+
+        const fetchAllLanguages = await fetch("http://127.0.0.1:8000/v1/languages", {
+            method:'GET'
+        });
+        const languagesList = await fetchAllLanguages.json();
+        this.setState({ languageVersionData, languagesList })
     }
 
 
@@ -43,13 +50,30 @@ class MenuBar extends Component {
 
     displayVersions(language) {
         if (!language) {
-            return <MenuItem key="" value="">Loading Versions</MenuItem>
+            return <MenuItem key="" value="" disabled>Loading Versions</MenuItem>
         }
         return this.state.languageVersionData[language].map(item => {
             return (
                 <MenuItem key={item.id} value={item.version}>{item.version}</MenuItem>
             )
         })
+    }
+
+
+    getTargetLanguage(){
+        if(!this.state.book){
+            return <MenuItem disabled>Load Book to get Language data</MenuItem>
+        }
+        if(!this.state.languagesList){
+            return <MenuItem disabled>Loading</MenuItem>
+        }else{
+            return this.state.languagesList.map(lang => {
+                return (
+                    <MenuItem key={lang.languageId} value={lang.languageName}>{lang.languageName}</MenuItem>
+                )
+            })
+            
+        }
     }
 
     async componentDidMount() {
@@ -75,6 +99,12 @@ class MenuBar extends Component {
         this.props.data.updateState({book: value})
     }
 
+    onTargetLanguageSelection = (value) => {
+        this.props.data.updateState({targetLanguage: value})
+    }
+
+
+
     getBookItems() {
         if (this.state.bookList) {
             return this.state.bookList.map(item => {
@@ -84,7 +114,7 @@ class MenuBar extends Component {
             })
         } else {
             return (
-                <MenuItem key="" value="">Select Book</MenuItem>
+                <MenuItem key="" value="" disabled>Loading Book</MenuItem>
             )
         }
     }
@@ -148,6 +178,25 @@ class MenuBar extends Component {
                                 }}
                             >
                                 {this.getBookItems()}
+                            </Select>
+                        </FormControl>
+                    </Paper>
+                </Grid>
+                <Grid item xs={3} md={2}>
+                    <Paper className={classes.selectButtonPaper}>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel htmlFor="select-target-language">Target</InputLabel>
+                            <Select
+                                className={classes.selectMenu}
+                                value={this.state.targetLanguage}
+                                onChange={(e) => this.setState({
+                                    targetLanguage: e.target.value
+                                }, () => { this.onTargetLanguageSelection(e.target.value) })}
+                                inputProps={{
+                                    id: 'select-target-language',
+                                }}
+                            >
+                                {this.getTargetLanguage()}
                             </Select>
                         </FormControl>
                     </Paper>

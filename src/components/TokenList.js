@@ -20,7 +20,7 @@ export default class TokenList extends Component {
     }
 
     getTokens(tokenList){
-        if(this.props.data.tokenList){
+        if(this.props.data.tokenList && this.props.data.targetLanguage){
             return tokenList.map(item => {
                 return (
                    <div key={item}>
@@ -31,6 +31,8 @@ export default class TokenList extends Component {
                     onClick={this.handleClick}>{item}</ListItem><Divider /></div>
                 )
             })
+        }else{
+            return <ListItem>Select Target Language to display tokens</ListItem>
         }
     }
     

@@ -6,6 +6,12 @@ import './components/css/style.css';
 import Header from './components/Header';
 import HomePage from './components/HomePage';
 import { BrowserRouter, Route} from 'react-router-dom';
+import LoginPage from './components/LoginPage';
+import SignUp from './components/SignUp';
+import UploadSource from './components/UploadSource';
+import AdminPage from './components/AdminPage';
+import { Input } from '@material-ui/core';
+
 
 const styles = theme => ({
   root: {
@@ -15,9 +21,9 @@ const styles = theme => ({
     backgroundColor: 'black'
   },
   h1: {
-    padding: '10px 0px 20px 0px',
-    margin: '0px',
-    textAlign: 'center',
+    padding: '10px 0px 10px 10px',
+    // margin: '0px',
+    textAlign: 'left',
     color: '#fff',
     backgroundColor: 'black'
 
@@ -27,16 +33,22 @@ const styles = theme => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
+  inputField:{
+    width:'90%',
+    marginLeft:'10px'
+  },
   textDisplay: {
     padding: theme.spacing.unit,
     color: theme.palette.text.secondary,
     marginBottom: '10px',
     height: 140,
+    width:'90%',
     overflow: 'auto',
     textAlign: 'justify',
     lineHeight: '25px',
     marginTop: '20px',
-    marginLeft: '20px'
+    marginLeft: '20px',
+    marginRight: '10px',
   },
   tokenList: {
     textAlign: 'center',
@@ -48,14 +60,25 @@ const styles = theme => ({
     overflowY: 'auto',
     backgroundColor: '#fff',
   },
+  tokenUpdation: {
+    color: theme.palette.text.secondary,
+    marginTop: '20px',
+    marginLeft: '20px',
+    height: 343,
+    // width: 500,
+    backgroundColor: '#fff',
+  },
   selectButtonPaper: {
     padding: theme.spacing.unit,
     textAlign: 'center',
     color: theme.palette.text.secondary,
     marginLeft: '20px',
-    marginTop: '5%',
+    marginTop: '10%',
     marginBottom: '10px'
-
+  },
+  button:{
+    marginLeft:'150px',
+    marginTop:'20px'
   },
   spanning: {
     color: 'blue'
@@ -73,7 +96,6 @@ const styles = theme => ({
     marginLeft: '0px',
     position: 'fixed',
     width: '29%',
-
   },
   inputLabel: {
     padding: '2px',
@@ -101,9 +123,56 @@ const styles = theme => ({
   selectMenu: {
     width: '120px',
   },
+  selectMenu2: {
+    width: '120px',
+    marginBottom:'5px'
+  },
   highlightToken: {
     color: 'blue',
     backgroundColor: 'yellow'
+  },
+  loginPage:{
+    marginTop:'5%'
+  },
+  forgot:{
+    cursor:'pointer',
+  },
+  versionUpdate:{
+    // padding:'5px',
+    width:'95%',
+    marginLeft:'10px',
+    marginRight:'10px',
+    marginTop:'10px',
+    // backgroundColor:'#3d6b7d'
+  },
+  versionDisplay:{
+    // padding:'5px',
+    width:'110%',
+    marginLeft:'10px',
+    marginRight:'10px',
+    marginTop:'10px'
+  },
+  versionTextField:{
+    padding:'5px'
+  },
+  uploadLabel:{
+    border: '1px solid black', 
+    padding: '10px'
+  },
+  uploadGrid:{
+    marginTop:'20px',
+    marginLeft:'130px'
+  },
+  typeG:{
+    backgroundColor: '#ccc',
+    padding:'10px 0px'
+  },
+  form:{
+    // backgroundColor:'blue',
+    padding:'0px 5px'
+  },
+  input:{
+    color:'#fff',
   }
 });
 
@@ -117,7 +186,13 @@ function App(props) {
         </Grid>
         <Grid item xs={12}>
           {/* <HomePage classes={classes} /> */}
+          <Route exact path="/" component={() => <LoginPage classes={classes} />} />
+          <Route path="/signin" component={() => <LoginPage classes={classes} />} />
+          <Route path="/signup" component={() => <SignUp classes={classes} />} />
           <Route path="/homepage" component={() => <HomePage classes={classes} />} />
+          <Route path="/upload" component={() => <UploadSource classes={classes} />} />
+          <Route path="/admindashboard" component={() => <AdminPage classes={classes} />} />
+          
         </Grid>
       </Grid>
     </BrowserRouter>

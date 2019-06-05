@@ -4,6 +4,7 @@ import MenuBar from './MenuBar';
 import TokenList from './TokenList';
 import Concordance from './Concordance';
 import Translations from './Translations';
+import UpdateTokens from './UpdateTokens';
 
 export default class HomePage extends Component {
     state = {
@@ -12,7 +13,8 @@ export default class HomePage extends Component {
         book: '',
         tokenList: '',
         token: '',
-        concordance: ''
+        concordance: '',
+        targetLanguage: ''
     }
 
     updateState = (value) => {
@@ -30,18 +32,26 @@ export default class HomePage extends Component {
                     version: this.state.version,
                     book: this.state.book
                 }} />
-                <Grid container item xs={11}>
-                    <Grid item xs={4}>
+                <Grid container item xs={12}>
+                    <Grid item xs={3}>
                         <TokenList data={{
                             updateState: this.updateState,
                             tokenList: this.state.tokenList,
                             book: this.state.book,
                             classes: classes,
                             language: this.state.language,
-                            version: this.state.version
+                            version: this.state.version,
+                            targetLanguage:this.state.targetLanguage
                         }} />
                     </Grid>
-                    <Grid item xs={8}>
+                    <Grid item xs={4}>
+                        <UpdateTokens data={{
+                            classes:classes,
+                            token: this.state.token,
+                            targetLanguage: this.state.targetLanguage
+                        }} />
+                    </Grid>
+                    <Grid item xs={5}>
                         <Concordance data={{
                             classes: classes,
                             book: this.state.book,
