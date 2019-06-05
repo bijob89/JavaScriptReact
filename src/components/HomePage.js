@@ -14,7 +14,9 @@ export default class HomePage extends Component {
         tokenList: '',
         token: '',
         concordance: '',
-        targetLanguage: ''
+        targetLanguage: '',
+        versionid:'',
+        targetLanguageId: ''
     }
 
     updateState = (value) => {
@@ -41,14 +43,16 @@ export default class HomePage extends Component {
                             classes: classes,
                             language: this.state.language,
                             version: this.state.version,
-                            targetLanguage:this.state.targetLanguage
+                            targetLanguage:this.state.targetLanguage,
+                            versionid:this.state.versionid
                         }} />
                     </Grid>
                     <Grid item xs={4}>
                         <UpdateTokens data={{
                             classes:classes,
                             token: this.state.token,
-                            targetLanguage: this.state.targetLanguage
+                            versionid: this.state.versionid,
+                            targetLanguageId:this.state.targetLanguageId
                         }} />
                     </Grid>
                     <Grid item xs={5}>

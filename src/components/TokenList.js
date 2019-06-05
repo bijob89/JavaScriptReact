@@ -4,8 +4,8 @@ import { Grid, Paper, ListItem, Divider } from '@material-ui/core';
 export default class TokenList extends Component {
 
     async getVerseText(token) {
-        const { language, book} = this.props.data
-        const data = await fetch('http://127.0.0.1:8000/v1/concordances/' + language + '/' + book + '/' + token, {
+        const { book} = this.props.data
+        const data = await fetch('http://127.0.0.1:8000/v1/concordances/' + this.props.data.versionid + '/' + book + '/' + token, {
             method:'GET'
         })
         const concordance = await data.json()

@@ -112,6 +112,7 @@ export default class UploadSource extends Component {
 
     uploadFile = e => {
         e.preventDefault();
+        console.log('during upload":', e.target.files)
         console.log(e.target.files[0])
         console.log("hello")
     }

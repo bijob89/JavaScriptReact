@@ -10,40 +10,34 @@ class MenuBar extends Component {
             version: '',
             bookList: '',
             book: '',
-            targetLanguage:''
+            targetLanguage:'',
+            versionDetails:[],
+            languageDetails:[],
+            versionid:''
     }
 
-    getLanguageData = async () => {
-        const fetchLanguageVersionData = await fetch("http://127.0.0.1:8000/v1/getlanguages", {
-            method: 'GET'
-        });
-        const languageVersionJson = await fetchLanguageVersionData.json();
-        var languageVersionData = languageVersionJson.languages
-
-        const fetchAllLanguages = await fetch("http://127.0.0.1:8000/v1/languages", {
-            method:'GET'
-        });
-        const languagesList = await fetchAllLanguages.json();
-        this.setState({ languageVersionData, languagesList })
-    }
-
-
-    async getBooks() {
-        var book = await fetch('http://127.0.0.1:8000/v1/books/' + this.state.language + '/' + this.state.version, {
+    async getVersionData() {
+        const data = await fetch('http://localhost:8000/v1/versiondetails', {
             method: 'GET'
         })
-        const mJson = await book.json();
-        this.setState({
-            bookList: mJson
-        })
-
+        const versionDetails = await data.json()
+        this.setState({ versionDetails })
     }
 
-    displayLanguages(value) {
-        var languages = Object.keys(value);
-        return languages.map(item => {
+    async getLanguagesData() {
+        const data = await fetch('http://localhost:8000/v1/languages', {
+            method: 'GET'
+        })
+        const languageDetails = await data.json()
+        this.setState({ languageDetails })
+    }
+
+
+
+    displayLanguage = () => {
+        return this.state.versionDetails.map(lang => {
             return (
-                <MenuItem key={item} value={item}>{item}</MenuItem>
+                <MenuItem key={lang.versionid} value={lang.languagename}>{lang.languagename}</MenuItem>
             )
         })
     }
@@ -52,10 +46,11 @@ class MenuBar extends Component {
         if (!language) {
             return <MenuItem key="" value="" disabled>Loading Versions</MenuItem>
         }
-        return this.state.languageVersionData[language].map(item => {
-            return (
-                <MenuItem key={item.id} value={item.version}>{item.version}</MenuItem>
-            )
+        const versions = this.state.versionDetails.filter((ver) => {
+            return ver.languagename === this.state.language
+        })
+        return versions.map(item => {
+            return <MenuItem key={item.versionid} value={item.versioncontentcode}>{item.versioncontentcode.toUpperCase()}</MenuItem>
         })
     }
 
@@ -67,7 +62,7 @@ class MenuBar extends Component {
         if(!this.state.languagesList){
             return <MenuItem disabled>Loading</MenuItem>
         }else{
-            return this.state.languagesList.map(lang => {
+            return this.state.languageDetails.map(lang => {
                 return (
                     <MenuItem key={lang.languageId} value={lang.languageName}>{lang.languageName}</MenuItem>
                 )
@@ -76,20 +71,38 @@ class MenuBar extends Component {
         }
     }
 
-    async componentDidMount() {
-        this.getLanguageData()
+    componentDidMount() {
+        this.getVersionData()
+        this.getLanguagesData()
     }
 
     async getTokenList() {
-        var book = await fetch('http://127.0.0.1:8000/v1/tokenlist/' + this.state.language + '/' + this.state.version + '/' + this.state.book, {
+        var book = await fetch('http://127.0.0.1:8000/v1/tokenlist/' + this.state.versionid + '/' + this.state.book, {
             method: 'GET'
         })
         const tokenList = await book.json();
         this.props.data.updateState({tokenList: tokenList})
     }
 
+    async getBooks() {
+        const version =  this.state.versionDetails.filter((ver) => {
+            return ver.languagename === this.state.language && ver.versioncontentcode === this.state.version && ver.contenttype === 'bible'
+        })
+        const versionid = version[0].versionid
+        var book = await fetch('http://127.0.0.1:8000/v1/books/' + versionid, {
+            method: 'GET'
+        })
+        const mJson = await book.json();
+        this.setState({
+            bookList: mJson,
+            versionid:versionid
+        })
+        this.props.data.updateState({versionid:versionid})
 
+    }
+    
     onVersionSelection = (value) => {
+        // console.log('state', this.state.versionid)
         this.getBooks()
         this.props.data.updateState({version: value})
     }
@@ -100,7 +113,12 @@ class MenuBar extends Component {
     }
 
     onTargetLanguageSelection = (value) => {
+        const selectedLanguage = this.state.languageDetails.filter((item) => {
+            return item.languageName === value
+        })
         this.props.data.updateState({targetLanguage: value})
+        this.props.data.updateState({targetLanguageId: selectedLanguage[0].languageId})
+        // ({ languagename: value, languageid: value[0].languageId })
     }
 
 
@@ -121,6 +139,7 @@ class MenuBar extends Component {
 
     render() {
         const { classes, updateState, language, version, book } = this.props.data
+        console.log(this.state)
         return (
             <Grid container item xs={12}>
                 <Grid item xs={3} md={2}>
@@ -138,7 +157,7 @@ class MenuBar extends Component {
                                     book: ''
                                 }, () => updateState({language:e.target.value}))
                                 }>
-                                {this.displayLanguages(this.state.languageVersionData)}
+                                {this.displayLanguage()}
                             </Select>
                         </FormControl>
                     </Paper>

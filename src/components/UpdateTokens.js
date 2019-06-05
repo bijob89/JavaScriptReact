@@ -3,6 +3,27 @@ import { Grid, Paper, Button } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
 
 export default class UpdateTokens extends Component {
+    state = {
+        translation: ''
+    }
+
+    async updateTransaltion(){
+        const { versionid, targetLanguageId } = this.props.data
+        const apiData = {
+            versionid: versionid,
+            targetLanguageId: targetLanguageId
+        }
+        const update = fetch('http://127.0.0.1:8000/v1/updatetokentranslations', {
+            method:'POST',
+            body: apiData
+        })
+        const myJson = update.json()
+    }
+
+    handleSubmit = e => {
+        e.preventDefault();
+
+    }
     render() {
         const { classes, token, targetLanguage } = this.props.data
         return (
@@ -25,6 +46,7 @@ export default class UpdateTokens extends Component {
                                 <TextField
                                     label="Enter Translation"
                                     // defaultValue="Select a Token"
+                                    onChange={(e) => this.setState({translation: e.target.value})}
                                     margin="normal"
                                     variant="outlined"
                                     className={classes.inputField}
@@ -34,7 +56,8 @@ export default class UpdateTokens extends Component {
                         <Button 
                         variant="contained" 
                         color="primary" 
-                        className={classes.button}>Update Token</Button>
+                        className={classes.button}
+                        onClick={this.handleSubmit}>Update Token</Button>
                     </form>
 
 
