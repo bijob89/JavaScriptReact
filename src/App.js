@@ -173,6 +173,9 @@ const styles = theme => ({
   },
   input:{
     color:'#fff',
+  },
+  checkBox:{
+    position:'right'
   }
 });
 

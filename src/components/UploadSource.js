@@ -35,13 +35,13 @@ export default class UploadSource extends Component {
         contentDetails: [],
         versioncontentcode: 'irv',
         versioncontentdescription: 'Indian Revised Version',
-        contenttype: 'bible',
+        contenttype: '',
         year: '2019',
         license: 'CC BY SA',
         revision: '3.0',
         languageid: '',
         contentid: '',
-        languagename: 'hindi',
+        languagename: '',
         fileContent: '',
         parsedUsfm:''
     }

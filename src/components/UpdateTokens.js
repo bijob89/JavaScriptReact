@@ -8,21 +8,24 @@ export default class UpdateTokens extends Component {
     }
 
     async updateTransaltion(){
-        const { versionid, targetLanguageId } = this.props.data
+        const { versionid, targetLanguageId, token } = this.props.data
         const apiData = {
             versionid: versionid,
-            targetLanguageId: targetLanguageId
+            targetLanguageId: targetLanguageId,
+            token: token,
+            translation: this.state.translation
         }
-        const update = fetch('http://127.0.0.1:8000/v1/updatetokentranslations', {
+        console.log('api', apiData)
+        const update = await fetch('http://127.0.0.1:8000/v1/updatetokentranslations', {
             method:'POST',
-            body: apiData
+            body: JSON.stringify(apiData)
         })
-        const myJson = update.json()
+        const myJson = await update.json()
     }
 
     handleSubmit = e => {
         e.preventDefault();
-
+        this.updateTransaltion();
     }
     render() {
         const { classes, token, targetLanguage } = this.props.data
@@ -30,7 +33,7 @@ export default class UpdateTokens extends Component {
             <Grid item xs={12}>
                 <Paper className={classes.tokenUpdation}>
 
-                    <form onSubmit={this.handleSubmit}>
+                    {/* <form onSubmit={this.handleSubmit}> */}
                         <Grid container item xs={12}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -44,6 +47,7 @@ export default class UpdateTokens extends Component {
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
+                                    required
                                     label="Enter Translation"
                                     // defaultValue="Select a Token"
                                     onChange={(e) => this.setState({translation: e.target.value})}
@@ -58,7 +62,7 @@ export default class UpdateTokens extends Component {
                         color="primary" 
                         className={classes.button}
                         onClick={this.handleSubmit}>Update Token</Button>
-                    </form>
+                    {/* </form> */}
 
 
                 </Paper>

@@ -27,7 +27,9 @@ export default class LoginPage extends Component {
         forgotPasswordDailogOpen: false,
         verificationCodeDialogOpen: false,
         dialogEmail:'',
-        verificationCode:''
+        verificationCode:'',
+        verifiedSuccess: false,
+        newPassword: false
     }
 
     async authenticate() {
@@ -45,7 +47,7 @@ export default class LoginPage extends Component {
             body: formData
         })
         const myJson = await data.json()
-        // console.log(myJson.message)
+        console.log(myJson.message)
         if ('access_token' in myJson) {
             localStorage.setItem('access_token', myJson.access_token)
             this.setState({ redirect: true })
@@ -54,6 +56,23 @@ export default class LoginPage extends Component {
         }
 
 
+    }
+
+
+
+    handleLoginSubmit = (e) => {
+        e.preventDefault();
+        this.authenticate()
+
+        // this.setState({redirect:true})
+    }
+
+    handleClose = () => {
+        this.setState({forgotPasswordDailogOpen:false, verificationCodeDialogOpen:false, verifiedSuccess:false})
+    }
+
+    handleOpen = () => {
+        this.setState({forgotPasswordDailogOpen: true})
     }
 
     async forgotPassword(){
@@ -77,25 +96,39 @@ export default class LoginPage extends Component {
         }
     }
 
-    handleLoginSubmit = (e) => {
-        e.preventDefault();
-        this.authenticate()
-
-        // this.setState({redirect:true})
-    }
-
-    handleClose = () => {
-        this.setState({forgotPasswordDailogOpen:false, verificationCodeDialogOpen:false})
-    }
-
-    handleOpen = () => {
-        this.setState({forgotPasswordDailogOpen: true})
-    }
-
     handleSend = (e) => {
         e.preventDefault();
         this.forgotPassword();
     }
+
+    async resetPassword(){
+        var formData = new FormData();
+        var apiData = {
+            temporaryPassword: this.state.verificationCode,
+            password: this.state.newPassword
+        }
+        for (var name in apiData) {
+            formData.append(name, apiData[name])
+        }
+        const reset = await fetch('http://127.0.0.1:8000/v1/forgotpassword', {
+            method:'POST',
+            body: formData
+        });
+        const myJson = await reset.json()
+        if(myJson.success){
+            this.setState({verificationCodeDialogOpen:false, verifiedSuccess:true})
+        }
+    }
+
+    handleVerificationCode = (e) => {
+        e.preventDefault();
+        this.resetPassword()
+    }
+
+    handleOk = () => {
+        this.setState({verifiedSuccess:false})
+    }
+
     render() {
         console.log(this.state)
         const { redirect } = this.state
@@ -213,10 +246,45 @@ export default class LoginPage extends Component {
                             fullWidth
                             onChange={(e) => this.setState({verificationCode:e.target.value})}
                         />
+                        <DialogContentText>
+                            <br />
+                            Enter the your new password.
+                        </DialogContentText>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="newpassword"
+                            type="password"
+                            label="Enter new password"
+                            fullWidth
+                            onChange={(e) => this.setState({newPassword:e.target.value})}
+                        />
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleVerificationCode} color="primary">
                             Submit
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={this.state.verifiedSuccess}
+                    // onClose={this.handleClose}
+                    aria-labelledby="form-dialog-title"
+                    // keepMounted
+                    onClose={this.handleClose}
+                    // aria-labelledby="alert-dialog-slide-title"
+                    // aria-describedby="alert-dialog-slide-description"
+                >
+                    <DialogTitle id="form-dialog-title">Successful</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            <br />
+                            Your Password has been changed. Login in with the new password
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleOk} color="primary">
+                            OK
                         </Button>
                     </DialogActions>
                 </Dialog>
