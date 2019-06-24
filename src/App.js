@@ -10,7 +10,7 @@ import LoginPage from './components/LoginPage';
 import SignUp from './components/SignUp';
 import UploadSource from './components/UploadSource';
 import AdminPage from './components/AdminPage';
-import { Input } from '@material-ui/core';
+import DownloadDraft from './components/DownloadDraft';
 
 
 const styles = theme => ({
@@ -40,22 +40,22 @@ const styles = theme => ({
   textDisplay: {
     padding: theme.spacing.unit,
     color: theme.palette.text.secondary,
-    marginBottom: '10px',
-    height: 140,
-    width:'90%',
+    // marginBottom: '10px',
+    height: 165,
+    // width:'90%',
     overflow: 'auto',
     textAlign: 'justify',
-    lineHeight: '25px',
-    marginTop: '20px',
-    marginLeft: '20px',
-    marginRight: '10px',
+    lineHeight: '20px',
+    // marginTop: '20px',
+    // marginLeft: '20px',
+    // marginRight: '10px'
   },
   tokenList: {
     textAlign: 'center',
     color: theme.palette.text.secondary,
-    marginTop: '20px',
-    marginLeft: '20px',
-    height: 343,
+    // marginTop: '20px',
+    // marginLeft: '20px',
+    height: 360,
     overflowX: 'hidden',
     overflowY: 'auto',
     backgroundColor: '#fff',
@@ -67,6 +67,14 @@ const styles = theme => ({
     height: 343,
     // width: 500,
     backgroundColor: '#fff',
+  },
+  containerGrid:{
+    width:'97%',
+    marginLeft:'2%',
+    marginRight:'2%',
+    border:'1px solid #3e51b5',
+    boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+    height:'100%'
   },
   selectButtonPaper: {
     padding: theme.spacing.unit,
@@ -164,7 +172,8 @@ const styles = theme => ({
     marginLeft:'130px'
   },
   typeG:{
-    backgroundColor: '#ccc',
+    backgroundColor: '#3e51b5',
+    color:'white',
     padding:'10px 0px'
   },
   form:{
@@ -174,8 +183,20 @@ const styles = theme => ({
   input:{
     color:'#fff',
   },
+  buttonGrid:{
+    padding:'10px 20%',
+  },
   checkBox:{
     position:'right'
+  },
+  translationSelectionPane:{
+    marginLeft:'5%',
+    marginTop:'10px',
+    marginBottom:'10px'
+  },
+  selectionGrid:{
+    marginLeft:'4%',
+    marginTop:'1%'
   }
 });
 
@@ -187,7 +208,8 @@ function App(props) {
         <Grid item xs={12}>
           <Header classes={classes} />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} style={{backgroundColor:'#fbfbfb'}}>
+        {/* <Grid item xs={12}> */}
           {/* <HomePage classes={classes} /> */}
           <Route exact path="/" component={() => <LoginPage classes={classes} />} />
           <Route path="/signin" component={() => <LoginPage classes={classes} />} />
@@ -195,7 +217,7 @@ function App(props) {
           <Route path="/homepage" component={() => <HomePage classes={classes} />} />
           <Route path="/upload" component={() => <UploadSource classes={classes} />} />
           <Route path="/admindashboard" component={() => <AdminPage classes={classes} />} />
-          
+          <Route path="/download" component={() => <DownloadDraft classes={classes} />} />
         </Grid>
       </Grid>
     </BrowserRouter>

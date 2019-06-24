@@ -3,7 +3,6 @@ import {
     Grid,
     TextField,
     Button,
-    CssBaseline,
     FormControlLabel,
     Checkbox,
     Link,
@@ -12,8 +11,7 @@ import {
     DialogActions,
     DialogContent,
     DialogContentText,
-    DialogTitle,
-    Slide
+    DialogTitle
 } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import { Redirect } from 'react-router-dom';
