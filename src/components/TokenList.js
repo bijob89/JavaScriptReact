@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { Grid, Paper, ListItem, Divider } from '@material-ui/core';
+import { Grid, ListItem, Divider } from '@material-ui/core';
 import ComponentHeading from './ComponentHeading';
+import apiUrl from './GlobalUrl'
 
 export default class TokenList extends Component {
-
+   
     async getVerseText(token) {
         const { sourceId, book } = this.props.data
         console.log(sourceId, book)
-        const data = await fetch('http://127.0.0.1:8000/v1/concordances/' + sourceId + '/' + book + '/' + token, {
+        const data = await fetch(apiUrl + '/v1/concordances/' + sourceId + '/' + book + '/' + token, {
             method: 'GET'
         })
         const concordance = await data.json()
@@ -17,7 +18,7 @@ export default class TokenList extends Component {
 
     async getTranslationWords(word) {
         const { sourceId } = this.props.data
-        const data = await fetch('http://127.0.0.1:8000/v1/translationshelps/words/' + sourceId + '/' + word, {
+        const data = await fetch(apiUrl + '/v1/translationshelps/words/' + sourceId + '/' + word, {
             method: 'GET'
         })
         const translationWords = await data.json()
@@ -26,10 +27,26 @@ export default class TokenList extends Component {
         }
     }
 
+    async getTranslatedWords(word){
+        const { sourceId, targetLanguageId, updateState } = this.props.data
+        const data = await fetch(apiUrl + '/v1/translations/' + sourceId + '/' + targetLanguageId + '/' + word, {
+            method:'GET'
+        })
+        const translatedWords = await data.json()
+        if(translatedWords.translation){
+            console.log("******************", translatedWords)
+            const {translation, senses} = translatedWords
+            updateState({tokenTranslation: translation, senses: senses})
+        }else{
+            updateState({tokenTranslation: '', senses: []})
+        }
+    }
+
     handleClick = e => {
         var word = e.target.getAttribute('value')
         this.getTranslationWords(word)
-        this.props.data.updateState({ token: word, concordance:'', translationNotes:'' })
+        this.props.data.updateState({ token: word, concordance:'', translationNotes:''})
+        this.getTranslatedWords(word)
         this.getVerseText(word)
     }
 
@@ -58,10 +75,6 @@ export default class TokenList extends Component {
         return (
             <Grid item xs={12} className={classes.containerGrid}>
                 <Grid item xs={12}>
-                    {/* 
-                    <Typography variant="h5" color="inherit" align="center" className={classes.typeG}>
-                        Token List
-                    </Typography> */}
                     <ComponentHeading data={{ classes: classes, text: "Token List" }} />
                 </Grid>
                 <Grid item xs={12} className={classes.tokenList}>

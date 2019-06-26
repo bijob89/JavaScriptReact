@@ -8,6 +8,7 @@ import TranslationsWords from './TranslationWords';
 import UpdateTokens from './UpdateTokens';
 import { Switch } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
+import Header from './Header';
 
 export default class HomePage extends Component {
     state = {
@@ -33,6 +34,8 @@ export default class HomePage extends Component {
         displayTranslationNotes: 'none',
         translationNotes: '',
         displayTranslationWordSwitch: 'none',
+        tokenTranslation:'',
+        senses:[]
     }
 
     updateState = (value) => {
@@ -51,7 +54,7 @@ export default class HomePage extends Component {
                 displayTranslationWordSwitch: 'none',
                 displayTranslationWords:'none',
                 displayConcordancePane:'block',
-                tWswitchChecked:!tWswitchChecked
+                tWswitchChecked:false
 
             })
         } else {
@@ -91,7 +94,8 @@ export default class HomePage extends Component {
 
     render() {
         const { classes } = this.props
-        console.log("Notes", this.state.translationNotes)
+        // console.log("Notes", this.state.translationNotes)
+        console.log("Home STate", this.state)
         const {
             tokenPane,
             translationPane,
@@ -106,6 +110,7 @@ export default class HomePage extends Component {
         return (
             <Grid container item xs={12}>
                 {/* <Grid item xs={2}> */}
+                <Header classes={classes} />
                 <MenuBar data={{
                     updateState: this.updateState,
                     classes: classes,
@@ -114,9 +119,9 @@ export default class HomePage extends Component {
                     book: this.state.book
                 }} />
                 <Grid container item xs={12}>
-                    <Grid container alignItems="flex-start" justify="flex-end" xs={7}>
+                    <Grid container alignItems="flex-start" justify="flex-end" item xs={7}>
                     </Grid>
-                    <Grid container alignItems="flex-start" justify="flex-end" xs={2}
+                    <Grid container alignItems="flex-start" justify="flex-end" item xs={2}
                     >
                         <Typography color="textSecondary" style={{display: displayTranslationWordSwitch}}>
                             Toggle Translation Words
@@ -131,7 +136,7 @@ export default class HomePage extends Component {
                             </Switch>
                         </div>
                     </Grid>
-                    <Grid container alignItems="flex-start" justify="flex-end" xs={3}>
+                    <Grid container alignItems="flex-start" justify="flex-end" item xs={3}>
                         <Typography color="textSecondary">
                             Toggle Translation Helps
                         </Typography>
@@ -154,7 +159,8 @@ export default class HomePage extends Component {
                             language: this.state.language,
                             version: this.state.version,
                             targetLanguage: this.state.targetLanguage,
-                            sourceId: this.state.sourceId
+                            sourceId: this.state.sourceId,
+                            targetLanguageId: this.state.targetLanguageId
                         }} />
                     </Grid>
                     <Grid item xs={translationPane}>
@@ -163,7 +169,10 @@ export default class HomePage extends Component {
                             token: this.state.token,
                             sourceId: this.state.sourceId,
                             targetLanguageId: this.state.targetLanguageId,
-                            book: this.state.book
+                            book: this.state.book,
+                            tokenTranslation: this.state.tokenTranslation,
+                            senses: this.state.senses,
+                            updateState:this.updateState
                         }} />
                     </Grid>
                     <Grid item xs={concordancePane}

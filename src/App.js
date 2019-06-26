@@ -5,56 +5,49 @@ import Grid from '@material-ui/core/Grid';
 import './components/css/style.css';
 import Header from './components/Header';
 import HomePage from './components/HomePage';
-import { BrowserRouter, Route} from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
 import SignUp from './components/SignUp';
 import UploadSource from './components/UploadSource';
 import AdminPage from './components/AdminPage';
 import DownloadDraft from './components/DownloadDraft';
-
+import Routes from './components/Routes';
+// import {Router} from 'react-router-dom'
 
 const styles = theme => ({
   root: {
+    flexGrow: 1,
+  },
+  grow: {
     flexGrow: 1,
   },
   body: {
     backgroundColor: 'black'
   },
   h1: {
-    padding: '10px 0px 10px 10px',
-    // margin: '0px',
-    textAlign: 'left',
-    color: '#fff',
     backgroundColor: 'black'
-
   },
   paper: {
     padding: theme.spacing.unit * 2,
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
-  inputField:{
-    width:'90%',
-    marginLeft:'10px'
+  inputField: {
+    width: '90%',
+    marginLeft: '10px'
   },
   textDisplay: {
     padding: theme.spacing.unit,
     color: theme.palette.text.secondary,
-    // marginBottom: '10px',
+    backgroundColor: '#fff',
     height: 165,
-    // width:'90%',
     overflow: 'auto',
     textAlign: 'justify',
     lineHeight: '20px',
-    // marginTop: '20px',
-    // marginLeft: '20px',
-    // marginRight: '10px'
   },
   tokenList: {
     textAlign: 'center',
     color: theme.palette.text.secondary,
-    // marginTop: '20px',
-    // marginLeft: '20px',
     height: 360,
     overflowX: 'hidden',
     overflowY: 'auto',
@@ -65,16 +58,16 @@ const styles = theme => ({
     marginTop: '20px',
     marginLeft: '20px',
     height: 343,
-    // width: 500,
     backgroundColor: '#fff',
   },
-  containerGrid:{
-    width:'97%',
-    marginLeft:'2%',
-    marginRight:'2%',
-    border:'1px solid #3e51b5',
+  containerGrid: {
+    width: '97%',
+    marginLeft: '2%',
+    marginRight: '2%',
+    border: '1px solid #3e51b5',
     boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
-    height:'100%'
+    height: '100%',
+    backgroundColor: '#fff',
   },
   selectButtonPaper: {
     padding: theme.spacing.unit,
@@ -84,9 +77,12 @@ const styles = theme => ({
     marginTop: '10%',
     marginBottom: '10px'
   },
-  button:{
-    marginLeft:'150px',
-    marginTop:'20px'
+  button: {
+    marginLeft: '150px',
+    marginTop: '20px'
+  },
+  buttonText: {
+    textTransform: 'none'
   },
   spanning: {
     color: 'blue'
@@ -133,94 +129,90 @@ const styles = theme => ({
   },
   selectMenu2: {
     width: '120px',
-    marginBottom:'5px'
+    marginBottom: '5px'
   },
   highlightToken: {
     color: 'blue',
     backgroundColor: 'yellow'
   },
-  loginPage:{
-    marginTop:'5%'
+  loginPage: {
+    marginTop: '5%'
   },
-  forgot:{
-    cursor:'pointer',
+  forgot: {
+    cursor: 'pointer',
   },
-  versionUpdate:{
+  uploadPane:{
+    marginTop:'4%',
+    padding:'10px',
+    // border: '1px solid black#3e51b5',
+    boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+  },
+  versionUpdate: {
     // padding:'5px',
-    width:'95%',
-    marginLeft:'10px',
-    marginRight:'10px',
-    marginTop:'10px',
+    width: '95%',
+    marginLeft: '10px',
+    marginRight: '10px',
+    marginTop: '10px',
     // backgroundColor:'#3d6b7d'
   },
-  versionDisplay:{
-    // padding:'5px',
-    width:'110%',
-    marginLeft:'10px',
-    marginRight:'10px',
-    marginTop:'10px'
+  versionDisplay: {
+    width: '98%',
+    marginLeft: '1%',
+    marginTop:'1%'
   },
-  versionTextField:{
-    padding:'5px'
+  versionTextField: {
+    padding: '5px'
   },
-  uploadLabel:{
-    border: '1px solid black', 
+  uploadLabel: {
+    border: '1px solid black',
     padding: '10px'
   },
-  uploadGrid:{
-    marginTop:'20px',
-    marginLeft:'130px'
+  uploadGrid: {
+    marginTop: '20px',
+    marginLeft: '130px'
   },
-  typeG:{
+  typeG: {
     backgroundColor: '#3e51b5',
-    color:'white',
-    padding:'10px 0px'
+    color: 'white',
+    padding: '10px 0px'
   },
-  form:{
+  form: {
     // backgroundColor:'blue',
-    padding:'0px 5px'
+    padding: '0px 5px'
   },
-  input:{
-    color:'#fff',
+  input: {
+    color: '#fff',
   },
-  buttonGrid:{
-    padding:'10px 20%',
+  buttonGrid: {
+    padding: '10px 20%',
   },
-  checkBox:{
-    position:'right'
+  checkBox: {
+    position: 'right'
   },
-  translationSelectionPane:{
-    marginLeft:'5%',
-    marginTop:'10px',
-    marginBottom:'10px'
+  translationSelectionPane: {
+    marginLeft: '5%',
+    marginTop: '10px',
+    marginBottom: '10px'
   },
-  selectionGrid:{
-    marginLeft:'4%',
-    marginTop:'1%'
+  selectionGrid: {
+    marginLeft: '4%',
+    marginTop: '1%'
   }
 });
 
 function App(props) {
   const { classes } = props;
   return (
-    <BrowserRouter>
+    // <BrowserRouter>
       <Grid container className={classes.root}>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <Header classes={classes} />
-        </Grid>
-        <Grid item xs={12} style={{backgroundColor:'#fbfbfb'}}>
-        {/* <Grid item xs={12}> */}
-          {/* <HomePage classes={classes} /> */}
-          <Route exact path="/" component={() => <LoginPage classes={classes} />} />
-          <Route path="/signin" component={() => <LoginPage classes={classes} />} />
-          <Route path="/signup" component={() => <SignUp classes={classes} />} />
-          <Route path="/homepage" component={() => <HomePage classes={classes} />} />
-          <Route path="/upload" component={() => <UploadSource classes={classes} />} />
-          <Route path="/admindashboard" component={() => <AdminPage classes={classes} />} />
-          <Route path="/download" component={() => <DownloadDraft classes={classes} />} />
+        </Grid> */}
+        <Grid item xs={12} style={{ backgroundColor: '#fbfbfb' }}>
+          <Routes classes={classes} />
         </Grid>
       </Grid>
-    </BrowserRouter>
+    // </BrowserRouter>
   );
 }
 

@@ -8,6 +8,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import MenuItem from '@material-ui/core/MenuItem';
 import DialogActions from '@material-ui/core/DialogActions';
+import Header from './Header';
+import PopUpMessages from './PopUpMessages';
 var FileSaver = require('file-saver');
 
 
@@ -22,14 +24,16 @@ export default class DownloadDraft extends Component {
             book: '',
             targetLanguage:'',
             targetLanguageId:'',
-            // languageDetails:[],
             sourceId:'',
             open:false,
             checked:false,
             translatedTokenInfo:{},
             versionDetails:[],
             targetBooksChecked: {},
-            targetBooks: []
+            targetBooks: [],
+            varian:'',
+            snackBarOpen:false,
+            message:''
     }
 
     async getTranslatedTokenInfo(){
@@ -81,13 +85,18 @@ export default class DownloadDraft extends Component {
             bookList: bookList
         }
         console.log(apiData)
-        const data = await fetch('http://localhost:8000/v1/downloaddraft', {
-            method:'POST',
-            body: JSON.stringify(apiData)
-        })
-        const myJson = await data.json()
-        var blob = new Blob([myJson.translatedUsfmText], {type: "text/plain;charset=utf-8"});
-        FileSaver.saveAs(blob, targetLanguage + "_" + version + "_.usfm");
+        try{
+            const data = await fetch('http://localhost:8000/v1/downloaddraft', {
+                method:'POST',
+                body: JSON.stringify(apiData)
+            })
+            const myJson = await data.json()
+            var blob = new Blob([myJson.translatedUsfmText], {type: "text/plain;charset=utf-8"});
+            FileSaver.saveAs(blob, targetLanguage + "_" + version + "_.usfm");
+        }
+        catch(ex){
+            this.setState({variant:"error", message:"server Error", snackBarOpen:true})
+        }
     }
 
     handleClick = e => {
@@ -205,12 +214,18 @@ export default class DownloadDraft extends Component {
         }
     }
 
+    closeSnackBar = (value) => {
+        this.setState(value)
+    }
+
     render() {
         console.log("state",this.state)
         const { classes } = this.props
         return (
             // <Grid container item xs={12}>
                 <Grid item xs={12} container>
+                <Header classes={classes} />
+                <PopUpMessages data={{varian:this.state.variant, snackBarOpen:this.state.snackBarOpen, message:this.state.message, closeSnackBar:this.closeSnackBar }} />
                     <FormControl className={classes.translationSelectionPane}>
                     <InputLabel htmlFor="select-language">Language</InputLabel>
                         <Select className={classes.selectMenu}

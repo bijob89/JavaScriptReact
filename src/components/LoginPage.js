@@ -15,6 +15,8 @@ import {
 } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import { Redirect } from 'react-router-dom';
+import Header from './Header';
+import jwt_decode from 'jwt-decode';
 
 export default class LoginPage extends Component {
     state = {
@@ -63,6 +65,26 @@ export default class LoginPage extends Component {
         this.authenticate()
 
         // this.setState({redirect:true})
+    }
+
+    componentDidMount(){
+        let decoded;
+        var accessToken = localStorage.getItem('access_token')
+        if (accessToken) {
+            decoded = jwt_decode(accessToken)
+            console.log(decoded)
+            let currentDate = new Date().getTime()
+            let expiry = decoded.exp * 1000
+            console.log(currentDate, expiry)
+            var hours = Math.abs(expiry - currentDate) / 36e5
+            if(hours > 0){
+                console.log(hours)
+                console.log("logged in")
+                this.setState({redirect:true})
+            }else{
+                console.log("logged out")
+            }
+        }
     }
 
     handleClose = () => {
@@ -135,6 +157,8 @@ export default class LoginPage extends Component {
         }
         const { classes } = this.props
         return (
+            <div>
+            <Header classes={classes} />
             <Container component="main" maxWidth="xs" className={classes.loginPage}>
                 {/* <Paper className={classes.loginPage}> */}
                 {/* <CssBaseline /> */}
@@ -288,6 +312,7 @@ export default class LoginPage extends Component {
                 </Dialog>
                 {/* </Paper> */}
             </Container>
+            </div>
         )
     }
 }

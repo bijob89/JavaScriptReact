@@ -22,9 +22,8 @@ import {
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import AddIcon from '@material-ui/icons/Add';
-// import CircularProgress from '@material-ui/core/CircularProgress';
-// import Fade from '@material-ui/core/Fade';
-// import { async } from 'q';
+import Container from '@material-ui/core/Container';
+import Header from './Header';
 var grammar = require('usfm-grammar');
 
 
@@ -129,17 +128,22 @@ export default class UploadSource extends Component {
 
 
     async uploadVersionDetails(apiData) {
-        const postVersions = await fetch('http://127.0.0.1:8000/v1/uploadsources', {
-            method: 'POST',
-            body: JSON.stringify(apiData)
-        })
-        const myJson = await postVersions.json()
-        this.setState({message:myJson.message})
-        if (myJson.success){
-            return true
-        }else{
-            return false
-
+        try{
+            const postVersions = await fetch('http://127.0.0.1:8000/v1/uploadsources', {
+                method: 'POST',
+                body: JSON.stringify(apiData)
+            })
+            const myJson = await postVersions.json()
+            this.setState({message:myJson.message})
+            if (myJson.success){
+                return true
+            }else{
+                return false
+    
+            }
+        }
+        catch(ex){
+            this.setState({ variant: "error", snackBarOpen: true, message: "Upload Process Failed", snackColor: '#d32f2f' })
         }
     }
 
@@ -248,15 +252,17 @@ export default class UploadSource extends Component {
         // var jsonOutput = grammar.parse(this.state.fileContent)
         // console.log(jsonOutput)
         return (
-            <Grid container item xs={11}>
-                <Grid item xs={12} md={4}>
-                    <Paper className={classes.versionUpdate}>
+            <div>
+            
+            <Header classes={classes} />
+            <Container component="main" maxWidth="xs" className={classes.uploadPane}>
+                    {/* <Paper className={classes.versionUpdate}> */}
 
-                        <Typography variant="h5" color="inherit" align="center" className={classes.typeG}>
+                        <Typography variant="h5" color="primary" align="center" >
                             Enter details
                         </Typography>
 
-                        <Divider />
+                        {/* <Divider /> */}
                         <Snackbar
                             anchorOrigin={{
                                 vertical: 'top',
@@ -427,74 +433,12 @@ export default class UploadSource extends Component {
                             unmountOnExit
                         > */}
                         {/* </Fade> */}
-                    </Paper>
-                </Grid>
-                    <Grid item xs={12} md={8}>
-                        <Paper className={classes.versionDisplay}>
+                    {/* </Paper> */}
+                    
 
-                            {/* <br /> */}
-                            <Typography variant="h5" align="center" className={classes.typeG}>
-                                View Sources
-                        </Typography>
-                            {/* <br /> */}
-                            <Divider />
-                            <Table className={classes.table}>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Version Content Description</TableCell>
-                                        <TableCell align="right">Version Content Code</TableCell>
-                                        <TableCell align="right">Year</TableCell>
-                                        <TableCell align="right">License</TableCell>
-                                        <TableCell align="right">Revision</TableCell>
-                                        <TableCell align="right">Content Type</TableCell>
-                                        <TableCell align="right">Language</TableCell>
-                                        {/* <TableCell align="right">Upload</TableCell> */}
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {this.state.versionDetails.map(row => (
-                                        <TableRow key={row.versionid}>
-                                            <TableCell align="right">{row.versionContentDescription}</TableCell>
-                                            <TableCell align="right">{row.versionContentCode}</TableCell>
-                                            <TableCell align="right">{row.year}</TableCell>
-                                            <TableCell align="right">{row.license}</TableCell>
-                                            <TableCell align="right">{row.revision}</TableCell>
-                                            <TableCell align="right">{row.contentType}</TableCell>
-                                            <TableCell align="right">{row.languageName}</TableCell>
-                                            {/* <Button variant="raised" color="primary">Upload Books</Button> */}
-                                        </TableRow>
-                                    ))}
-                                    {/* {rows.map(row => (
-                                    <TableRow key={row.name}>
-                                        <TableCell component="th" scope="row">
-                                            {row.name}
-                                        </TableCell>
-                                        <TableCell align="right">{row.calories}</TableCell>
-                                        <TableCell align="right">{row.fat}</TableCell>
-                                        <TableCell align="right">{row.carbs}</TableCell>
-                                        <TableCell align="right">{row.protein}</TableCell>
-                                    </TableRow>
-                                ))} */}
-                                </TableBody>
-                                <TableFooter>
-                                    <TableRow>
-                                        <TablePagination
-                                            rowsPerPageOptions={[5, 10, 25]}
-                                            colSpan={1}
-                                            count={3}
-                                            rowsPerPage={5}
-                                            page={''}
-                                            SelectProps={{
-                                                native: true,
-                                            }}
-                                        />
-                                    </TableRow>
-                                </TableFooter>
-                            </Table>
-                        </Paper>
-                    </Grid>
+                </Container>
 
-                </Grid>
+</div>
                 )
             }
         }
